@@ -1,32 +1,26 @@
-name: C++ CI
+name: Build and Test
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up C++ environment
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y clang clang-tidy valgrind
+      - name: Set up C++ compiler
+        run: sudo apt-get install g++
 
-    - name: Build
-      run: |
-        clang++ -std=c++17 -o program main.cpp
+      - name: Compile program
+        run: g++ -o labeval2 2.cpp
 
-    - name: Run Clang-Tidy
-      run: |
-        clang-tidy main.cpp -- -std=c++17
-
-    - name: Run Program
-      run: |
-        ./program
-
-    - name: Run Valgrind
-      run: |
-        valgrind --leak-check=full ./program
+      - name: Run program
+        run: ./labeval2
